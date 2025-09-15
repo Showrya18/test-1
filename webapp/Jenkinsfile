@@ -1,0 +1,57 @@
+pipeline{
+    agent any
+
+
+    tools{
+        jdk 'JDK11'
+        maven 'Maven'
+    }
+
+    stages{
+        stage('Git Checkout'){
+            steps{
+                git branch: 'main', url: 'https://github.com/Showrya18/test-1.git'
+            }
+        }
+        stage('Compile'){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage('Build'){
+            steps{
+                sh 'mvn clean install'
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                sh 'docker build -t Showrya18/project:1'
+            }
+        }
+        stage('Docker image scan'){
+            steps{
+                sh 'trivy image --format table -o trvy-image-report.html Showrya18/project:1'
+            }
+        }
+        stage('Containersation'){
+            steps{
+                sh 'docker run -it -d -p 9000:8080 --name project1 Showrya18/project:1'
+            }
+        }
+        stage('Login to Docker Hub'){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsID: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]){
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $USERNAME --password-stdin'
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image to Docker Hub'){
+            steps{
+                sh 'docker push Showrya18/project:1'
+            }
+        }
+    }
+
+}
