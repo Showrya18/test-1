@@ -25,7 +25,7 @@ pipeline{
         }
         stage('Build Docker Image'){
             steps{
-                sh 'docker build -t Showrya18/project:1'
+                sh 'docker build -t Showrya18/project:1 .'
             }
         }
         stage('Docker image scan'){
