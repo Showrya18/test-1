@@ -41,15 +41,15 @@ pipeline{
         stage('Login to Docker Hub'){
             steps{
                 script{
-                    withCredentials([usernamePassword(credentialsID: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]){
-                        sh 'echo $DOCKER_PASSWORD | docker login -u $USERNAME --password-stdin'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]){
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                     }
                 }
             }
         }
         stage('Push Docker Image to Docker Hub'){
             steps{
-                sh 'docker push Showrya18/project:1'
+                sh 'docker push showrya18/project:1'
             }
         }
     }
