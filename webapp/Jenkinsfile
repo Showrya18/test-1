@@ -25,19 +25,19 @@ pipeline{
         }
         stage('Build Docker Image'){
             steps{
-                sh 'docker build -t showrya18/project:1 -f webapp/Dockerfile webapp'
+                sh 'docker build -t showryapatel/project:1 -f webapp/Dockerfile webapp'
             }
         }
         stage('Docker image scan'){
             steps{
-                sh 'trivy image --format table -o trvy-image-report.html showrya18/project:1'
+                sh 'trivy image --format table -o trvy-image-report.html showryapatel/project:1'
             }
         }
         stage('Containersation'){
             steps{
                 sh '''
                 docker rm -f c1 || true
-                docker run -it -d --name c1 -p 9000:8080 showrya18/project:1
+                docker run -it -d --name c1 -p 9000:8080 showryapatel/project:1
                 '''
             }
         }
@@ -52,7 +52,7 @@ pipeline{
         }
         stage('Push Docker Image to Docker Hub'){
             steps{
-                sh 'docker push showrya18/project:1'
+                sh 'docker push showryapatel/project:1'
             }
         }
     }
