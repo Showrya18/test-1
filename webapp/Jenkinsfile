@@ -35,7 +35,10 @@ pipeline{
         }
         stage('Containersation'){
             steps{
-                sh 'docker run -it -d --name c1 -p 9000:8080 showrya18/project:1'
+                sh '''
+                docker rm -f c1 || true
+                docker run -it -d --name c1 -p 9000:8080 showrya18/project:1
+                '''
             }
         }
         stage('Login to Docker Hub'){
